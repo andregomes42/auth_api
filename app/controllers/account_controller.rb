@@ -1,4 +1,6 @@
 class AccountController < ApplicationController
+    skip_before_action :authenticate, only: [:signup]
+
     def signup
         payload = params.require(:user).permit(:email, :name, :birthdate, :password, :password_confirmation)
         @user = User.new(payload.except(:password_confirmation))

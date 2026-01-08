@@ -8,6 +8,16 @@ class TokenService
     refresh_token(user, sessionId)
   end
 
+  def self.validate(token)
+    now = Time.now.to_i
+    token = decode_token(token)
+    expiration = token.fetch("exp")
+
+    return nil unless expiration > now 
+
+    token.fetch("sub") 
+  end
+
   private
   
   def self.access_token(user, sessionId)
@@ -38,6 +48,6 @@ class TokenService
   end
 
   def self.decode_token(token)
-    JWT.decode(token, SECRET_KEY, ALGORITHM)
+    JWT.decode(token, SECRET_KEY, ALGORITHM).first
   end
 end
