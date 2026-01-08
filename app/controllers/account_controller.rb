@@ -1,6 +1,6 @@
 class AccountController < ApplicationController
-    def sign_up
-        payload = user_params
+    def signup
+        payload = params.require(:user).permit(:email, :name, :birthdate, :password, :password_confirmation)
         @user = User.new(payload.except(:password_confirmation))
         
         passwords_match(payload[:password], payload[:password_confirmation])
@@ -18,9 +18,5 @@ class AccountController < ApplicationController
         return if password == password_confirmation
 
         @user.errors.add(:password_confirmation, "passwords don't match")
-    end
-
-    def user_params
-        params.require(:user).permit(:email, :name, :birthdate, :password, :password_confirmation)
     end
 end

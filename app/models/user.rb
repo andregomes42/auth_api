@@ -6,6 +6,10 @@ class User < ApplicationRecord
 
   before_save :encode
 
+  def password_match(password)
+    BCrypt::Password.new(self.password) == password
+  end
+
   private
 
   def encode
