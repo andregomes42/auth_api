@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   post 'login', to:'auth#login'
 
+  post 'refresh', to:'auth#refresh'
+
   # Defines the root path route ("/")
   # root "posts#index"
 end

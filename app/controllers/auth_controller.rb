@@ -13,4 +13,10 @@ class AuthController < ApplicationController
       render json: { error: "Invalid credentials" }, status: :unauthorized
     end
   end
+
+  def refresh
+    token = TokenService.refresh(@token)
+
+    render json: { token: token }, status: :ok
+  end
 end
