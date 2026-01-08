@@ -1,5 +1,5 @@
 class CreateSchemaAuth < ActiveRecord::Migration[8.1]
-  def up
+  def change
     execute "CREATE SCHEMA IF NOT EXISTS auth"
   end
 

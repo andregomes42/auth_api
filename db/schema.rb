@@ -14,12 +14,4 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_03_215047) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "auth.users", force: :cascade do |t|
-    t.date "birthdate"
-    t.datetime "created_at", null: false
-    t.string "email"
-    t.string "name"
-    t.string "password"
-    t.datetime "updated_at", null: false
-  end
 end
