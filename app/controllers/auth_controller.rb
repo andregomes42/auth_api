@@ -19,4 +19,13 @@ class AuthController < ApplicationController
 
     render json: { token: token }, status: :ok
   end
+
+  def logout
+    ttl = TokenService.extract_exp(@token) - Time.now.to_i
+    sid = TokenService.extract_sid(@token)
+
+    REDIS.setex("blacklist:sid:#{sid}", ttl, 1)
+
+    head :no_content
+  end
 end

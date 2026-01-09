@@ -8,6 +8,15 @@ class TokenService
     refresh_token(user.id, session_id)
   end
 
+  def self.validate(token)
+    token = decode_token(token)
+    blacklisted = REDIS.get("blacklist:sid:#{token.fetch("sid")}")
+
+    return nil if blacklisted
+
+    token.fetch("sub") 
+  end
+
   def self.refresh(token)
     token = decode_token(token)
 
@@ -17,14 +26,16 @@ class TokenService
     access_token(user_id, session_id)
   end
 
-  def self.validate(token)
-    now = Time.now.to_i
+  def self.extract_sid(token)
     token = decode_token(token)
-    expiration = token.fetch("exp")
 
-    return nil unless expiration > now 
+    token.fetch("sid")
+  end
 
-    token.fetch("sub") 
+  def self.extract_exp(token)
+    token = decode_token(token)
+
+    token.fetch("exp")
   end
 
   private

@@ -9,7 +9,9 @@ Rails.application.routes.draw do
 
   post 'login', to:'auth#login'
 
-  post 'refresh', to:'auth#refresh'
+  patch 'refresh', to:'auth#refresh'
+
+  delete 'logout', to:'auth#logout'
 
   # Defines the root path route ("/")
   # root "posts#index"
