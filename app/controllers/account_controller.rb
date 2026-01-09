@@ -1,24 +1,14 @@
 class AccountController < ApplicationController
-    skip_before_action :authenticate, only: [:signup]
+  skip_before_action :authenticate, only: [:signup]
 
-    def signup
-        payload = params.require(:user).permit(:email, :name, :birthdate, :password, :password_confirmation)
-        @user = User.new(payload.except(:password_confirmation))
-        
-        passwords_match(payload[:password], payload[:password_confirmation])
-        
-        if @user.errors.empty? && @user.save
-            render json: @user, status: :created
-        else
-            render json: @user.errors, status: :unprocessable_entity
-        end
+  def signup
+    payload = params.require(:user).permit(:email, :name, :birthdate, :password, :password_confirmation)
+    result = AccountService.signup(payload)
+    
+    if result[:success]
+      render json: result[:user], status: :created
+    else
+      render json: result[:errors], status: :unprocessable_entity
     end
-
-    private
-
-    def passwords_match(password, password_confirmation)
-        return if password == password_confirmation
-
-        @user.errors.add(:password_confirmation, "passwords don't match")
-    end
+  end
 end

@@ -3,29 +3,24 @@ class AuthController < ApplicationController
 
   def login
     payload = params.require(:user).permit(:username, :password)
-    user = User.find_by(email: payload.fetch(:username)) 
-
-    if user&.password_match(payload.fetch(:password))
-      token = TokenService.encode(user)
-
-      render json: { token: token }, status: :ok
+    result = AuthService.login(payload[:username], payload[:password])
+    
+    if result[:success]
+      render json: { token: result[:token] }, status: :ok
     else
-      render json: { error: "Invalid credentials" }, status: :unauthorized
+      render json: { error: result[:error] }, status: :unauthorized
     end
   end
 
   def refresh
-    token = TokenService.refresh(@token)
-
-    render json: { token: token }, status: :ok
+    result = AuthService.refresh(@token)
+    
+    render json: { token: result[:token] }, status: :ok
   end
 
   def logout
-    ttl = TokenService.extract_exp(@token) - Time.now.to_i
-    sid = TokenService.extract_sid(@token)
-
-    REDIS.setex("blacklist:sid:#{sid}", ttl, 1)
-
+    AuthService.logout(@token)
+    
     head :no_content
   end
 end

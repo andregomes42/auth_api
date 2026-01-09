@@ -10,18 +10,18 @@ class TokenService
 
   def self.validate(token)
     token = decode_token(token)
-    blacklisted = REDIS.get("blacklist:sid:#{token.fetch("sid")}")
+    blacklisted = REDIS.get("blacklist:sid:#{token[:sid]}")
 
     return nil if blacklisted
 
-    token.fetch("sub") 
+    token[:sub] 
   end
 
   def self.refresh(token)
     token = decode_token(token)
 
-    user_id = token.fetch("sub")
-    session_id = token.fetch("sid")
+    user_id = token[:sub]
+    session_id = token[:sid]
     
     access_token(user_id, session_id)
   end
@@ -29,13 +29,13 @@ class TokenService
   def self.extract_sid(token)
     token = decode_token(token)
 
-    token.fetch("sid")
+    token[:sid]
   end
 
   def self.extract_exp(token)
     token = decode_token(token)
 
-    token.fetch("exp")
+    token[:exp]
   end
 
   private
