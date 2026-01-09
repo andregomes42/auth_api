@@ -1,6 +1,6 @@
 module Api
   module V1
-    class AccountController < BaseController
+    class AccountController < ApplicationController
       skip_before_action :authenticate, only: [:signup]
 
       def signup
@@ -16,4 +16,3 @@ module Api
     end
   end
 end
-

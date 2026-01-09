@@ -1,6 +1,6 @@
 module Api
   module V1
-    class AuthController < BaseController
+    class AuthController < ApplicationController
       skip_before_action :authenticate, only: [:login]
 
       def login
@@ -28,4 +28,3 @@ module Api
     end
   end
 end
-
