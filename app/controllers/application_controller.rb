@@ -10,16 +10,16 @@ class ApplicationController < ActionController::API
       @token = authorization.split(" ").last
 
       sub = TokenService.validate(@token)
-      return unauthorized unless sub
+      return render_unauthorized unless sub
 
       @current_user = User.find_by(id: sub)
-      unauthorized unless @current_user
+      render_unauthorized unless @current_user
     rescue
-      unauthorized
+      render_unauthorized
     end
   end
 
-  def unauthorized
+  def render_unauthorized
     render json: { error: "Unauthorized" }, status: :unauthorized
   end
 end
