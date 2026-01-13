@@ -8,16 +8,16 @@ module Api
         result = AuthService.login(payload[:username], payload[:password])
 
         if result[:success]
-          render json: { token: result[:token] }, status: :ok
+          render_success(data: { token: result[:token] }, status: :ok)
         else
-          render json: { error: result[:error] }, status: :unauthorized
+          render_unauthorized('Invalid Credentials')
         end
       end
 
       def refresh
         result = AuthService.refresh(@token)
 
-        render json: { token: result[:token] }, status: :ok
+        render_success(data: result[:token], status: :ok)
       end
 
       def logout

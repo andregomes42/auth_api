@@ -2,17 +2,17 @@ class AuthService
   def self.login(username, password)
     user = User.find_by(email: username)
     
-    return { success: false, error: "Invalid credentials" } unless user&.password_match(password)
+    return { success: false } unless user&.password_match(password)
     
-    token = TokenService.encode(user)
+    refresh_token = TokenService.encode(user)
     
-    { success: true, token: token }
+    { success: true, token: refresh_token }
   end
 
   def self.refresh(token)
-    new_token = TokenService.refresh(token)
+    access_token = TokenService.refresh(token)
     
-    { success: true, token: new_token }
+    { success: true, token: access_token }
   end
 
   def self.logout(token)

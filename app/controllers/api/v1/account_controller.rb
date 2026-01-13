@@ -8,9 +8,9 @@ module Api
         result = AccountService.signup(payload)
 
         if result[:success]
-          render json: result[:user], status: :created
+          render_success(data: result[:user], status: :created)
         else
-          render json: result[:errors], status: :unprocessable_entity
+          render_unprocessable_entity(result[:errors])
         end
       end
     end
