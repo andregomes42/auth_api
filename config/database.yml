@@ -19,12 +19,11 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   max_connections: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-
 development:
   <<: *default
   host: <%= ENV.fetch("DATABASE_HOST") %>
   port: <%= ENV.fetch("DATABASE_PORT") %>
-  database: <%= ENV.fetch("DATABASE_NAME") %>
+  database: <%= ENV.fetch("DATABASE_NAME", "development") %>
   username: <%= ENV.fetch("DATABASE_USER") %>
   password: <%= ENV.fetch("DATABASE_PASS") %>
 
@@ -62,7 +61,7 @@ test:
   <<: *default
   host: <%= ENV.fetch("DATABASE_HOST") %>
   port: <%= ENV.fetch("DATABASE_PORT") %>
-  database: <%= ENV.fetch("DATABASE_NAME") %>
+  database: <%= ENV.fetch("DATABASE_NAME", "test") %>
   username: <%= ENV.fetch("DATABASE_USER") %>
   password: <%= ENV.fetch("DATABASE_PASS") %>
 
@@ -97,7 +96,7 @@ production:
     <<: *default
     host: <%= ENV.fetch("DATABASE_HOST") %>
     port: <%= ENV.fetch("DATABASE_PORT") %>
-    database: <%= ENV.fetch("DATABASE_NAME") %>
+    database: <%= ENV.fetch("DATABASE_NAME", "production") %>
     username: <%= ENV.fetch("DATABASE_USER") %>
     password: <%= ENV.fetch("DATABASE_PASS") %>
   cache:
