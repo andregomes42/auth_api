@@ -1,6 +1,6 @@
 class AccountService
-  def self.signup(user_params)
-    user = User.new(user_params)
+  def self.signup(payload)
+    user = User.new(payload)
     
     return { success: false, errors: user.errors } unless user.valid?
     return { success: false, errors: user.errors } unless user.save
