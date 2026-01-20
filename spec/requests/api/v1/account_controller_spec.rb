@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe 'API::V1::AccountController', type: :request do
   describe 'POST /api/v1/signup' do
     context 'with valid params' do
-      it 'returns 201 and serialized user payload' do
+      it 'returns 201' do
         payload = attributes_for(:user)
         user = build(:user, payload)
 

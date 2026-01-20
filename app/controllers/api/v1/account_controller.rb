@@ -8,7 +8,7 @@ module Api
         result = AccountService.signup(payload)
 
         if result[:success]
-          render_success(data: result[:user], status: :created)
+          render_success(data: UserSerializer.new(result[:user]).as_json, status: :created)
         else
           render_unprocessable_entity(result[:errors])
         end
