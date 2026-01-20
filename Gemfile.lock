@@ -274,6 +274,7 @@ GEM
     rspec-expectations (3.13.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
+    rspec-json_expectations (2.2.0)
     rspec-mocks (3.13.7)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
@@ -378,18 +379,19 @@ DEPENDENCIES
   brakeman
   bundler-audit
   debug
-  dotenv-rails
-  email_validator
+  dotenv-rails (~> 3.2)
+  email_validator (~> 2.2)
   factory_bot_rails (~> 6.5)
   faker (~> 3.5)
-  hiredis
+  hiredis (~> 0.6.3)
   image_processing (~> 1.2)
-  jwt
+  jwt (~> 3.1)
   kamal
   pg (~> 1.1)
   puma (>= 5.0)
   rails (~> 8.1.1)
-  redis
+  redis (~> 5.4)
+  rspec-json_expectations (~> 2.2)
   rspec-rails (~> 8.0.0)
   rubocop-rails-omakase
   solid_cable

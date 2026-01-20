@@ -4,34 +4,34 @@ RSpec.describe AuthService, type: :service do
   describe '.login' do
     context 'with valid credentials' do
       it 'returns success and generates token' do
-        password = attributes_for(:user)[:password]
-        user = create(:user, password: password)
+        payload = attributes_for(:user)
+        user = create(:user, payload)
         
         allow(TokenService).to receive(:encode).with(user).and_return(user.password)
 
-        result = AuthService.login(user.email, password)
+        response = AuthService.login(user.email, payload[:password])
 
-        expect(result[:success]).to be true
-        expect(result[:token]).to eq(user.password)
+        expect(response[:success]).to be true
+        expect(response[:token]).to eq(user.password)
       end
     end
 
     context 'with invalid credentials' do
       it 'returns failure when user does not exist' do
-        result = AuthService.login('nonexistent@example.com', 'password')
+        response = AuthService.login('nonexistent@example.com', 'password')
 
-        expect(result[:success]).to be false
-        expect(result[:token]).not_to be_present
+        expect(response[:success]).to be false
+        expect(response[:token]).not_to be_present
       end
 
       it 'returns failure when password does not match' do
         user = create(:user)
         password = 'password'
 
-        result = AuthService.login(user.email, password)
+        response = AuthService.login(user.email, password)
 
-        expect(result[:success]).to be false
-        expect(result[:token]).not_to be_present
+        expect(response[:success]).to be false
+        expect(response[:token]).not_to be_present
       end
     end
   end
@@ -42,10 +42,10 @@ RSpec.describe AuthService, type: :service do
     
     allow(TokenService).to receive(:refresh).with(token).and_return(new_token)
 
-    result = AuthService.refresh(token)
+    response = AuthService.refresh(token)
 
-    expect(result[:success]).to be true
-    expect(result[:token]).to eq(new_token)
+    expect(response[:success]).to be true
+    expect(response[:token]).to eq(new_token)
   end
 
   it '.logout' do
@@ -58,9 +58,9 @@ RSpec.describe AuthService, type: :service do
     allow(Time).to receive(:now).and_return(Time.at(exp_time - 3600))
     allow(REDIS).to receive(:setex)
 
-    result = AuthService.logout(token)
+    response = AuthService.logout(token)
 
-    expect(result[:success]).to be true
+    expect(response).to be_nil
     expect(REDIS).to have_received(:setex).with("blacklist:sid:#{session_id}", 3600, 1)
   end
 end

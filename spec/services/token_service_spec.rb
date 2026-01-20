@@ -86,9 +86,9 @@ RSpec.describe TokenService, type: :service do
 
       expect(new_decoded.fetch('sub')).to eq(user_id)
       expect(new_decoded.fetch('sid')).to eq(session_id)
-      expect(new_decoded.fetch('jti')).not_to eq(decode.fetch('jti'))
-      expect(decoded.fetch('exp')).to be <= 5.minutes.from_now.to_i
-      expect(decoded.fetch('exp')).to be >= 5.minutes.from_now.to_i - 10
+      expect(new_decoded.fetch('jti')).not_to eq(decoded.fetch('jti'))
+      expect(new_decoded.fetch('exp')).to be <= 5.minutes.from_now.to_i
+      expect(new_decoded.fetch('exp')).to be >= 5.minutes.from_now.to_i - 10
     end
 
     it 'raises error when refresh token does not have required fields' do
