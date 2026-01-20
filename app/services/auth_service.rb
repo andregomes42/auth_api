@@ -20,7 +20,5 @@ class AuthService
     sid = TokenService.extract_sid(token)
     
     REDIS.setex("blacklist:sid:#{sid}", ttl, 1)
-    
-    { success: true }
   end
 end

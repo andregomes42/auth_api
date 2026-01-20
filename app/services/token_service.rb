@@ -38,6 +38,10 @@ class TokenService
     token.fetch("exp")
   end
 
+  def self.decode(token)
+    decode_token(token)
+  end
+
   private
   
   def self.access_token(user_id, session_id)
