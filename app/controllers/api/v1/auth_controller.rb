@@ -17,7 +17,7 @@ module Api
       def refresh
         result = AuthService.refresh(@token)
 
-        render_success(data: result[:token], status: :ok)
+        render_success(data: { token: result[:token] }, status: :ok)
       end
 
       def logout

@@ -24,7 +24,7 @@ RSpec.describe 'API::V1::AccountController', type: :request do
     end
 
     context 'with invalid params' do
-      it 'returns 422 when invalid params are provided' do
+      it 'returns 422' do
         payload = attributes_for(:user, :new)
         allow(AccountService).to receive(:signup).and_return({ success: false, errors: 'errors' })
 
