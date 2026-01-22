@@ -5,19 +5,19 @@ module Api
 
       def login
         payload = params.require(:user).permit(:username, :password)
-        result = AuthService.login(payload[:username], payload[:password])
+        response = AuthService.login(payload[:username], payload[:password])
 
-        if result[:success]
-          render_success(data: { token: result[:token] }, status: :ok)
+        if response[:success]
+          render_success(data: { token: response[:token] }, status: :ok)
         else
           render_unauthorized('Invalid Credentials')
         end
       end
 
       def refresh
-        result = AuthService.refresh(@token)
+        response = AuthService.refresh(@token)
 
-        render_success(data: { token: result[:token] }, status: :ok)
+        render_success(data: { token: response[:token] }, status: :ok)
       end
 
       def logout

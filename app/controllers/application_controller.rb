@@ -16,22 +16,22 @@ class ApplicationController < ActionController::API
 
   private
 
-  def authenticate
-    begin
-      authorization = request.headers["Authorization"]
-      @token = authorization.split(" ").last
+    def authenticate
+      begin
+        authorization = request.headers["Authorization"]
+        @token = authorization.split(" ").last
 
-      sub = TokenService.validate(@token)
-      return render_unauthorized unless sub
+        sub = TokenService.validate(@token)
+        return render_unauthorized unless sub
 
-      @current_user = User.find_by(id: sub)
-      render_unauthorized unless @current_user
-    rescue
-      render_unauthorized
+        @current_user = User.find_by(id: sub)
+        render_unauthorized unless @current_user
+      rescue
+        render_unauthorized
+      end
     end
-  end
 
-  def render_error(status:, status_code:, code:, message:, errors:)
-    render json: {status: status_code, code: code, message: message, errors: errors}, status: status
-  end
+    def render_error(status:, status_code:, code:, message:, errors:)
+      render json: {status: status_code, code: code, message: message, errors: errors}, status: status
+    end
 end

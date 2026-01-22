@@ -5,12 +5,23 @@ module Api
 
       def signup
         payload = params.require(:user).permit(:email, :name, :birthdate, :password, :password_confirmation)
-        result = AccountService.signup(payload)
+        response = AccountService.signup(payload)
 
-        if result[:success]
-          render_success(data: UserSerializer.new(result[:user]).as_json, status: :created)
+        if response[:success]
+          render_success(data: UserSerializer.new(response[:user]).as_json, status: :created)
         else
-          render_unprocessable_entity(result[:errors])
+          render_unprocessable_entity(response[:errors])
+        end
+      end
+
+      def reset_password
+        payload = params.require(:user).permit(:current_password, :new_password)
+        response = AccountService.reset_password(@current_user, payload[:current_password], payload[:new_password])
+
+        if response[:success]
+          head :no_content
+        else
+          render_unprocessable_entity(response[:errors])
         end
       end
     end

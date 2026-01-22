@@ -40,4 +40,52 @@ RSpec.describe 'API::V1::AccountController', type: :request do
       end
     end
   end
+
+  describe 'PATCH /api/v1/account/password' do
+    context 'with valid params' do
+      it 'returns 204' do
+        payload = attributes_for(:user)
+        user = create(:user, payload)
+        token = 'valid_token'
+
+        allow(TokenService).to receive(:validate).with(token).and_return(user.id)
+        allow(AccountService).to receive(:reset_password).with(user, payload[:pasword], payload[:pasword])
+          .and_return({ success: true })
+
+        patch "/api/v1/account/password", headers: { 'Authorization' => "Bearer #{token}" },
+          params: { user: { current_password: payload[:pasword], new_password: payload[:pasword] } }
+        
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
+    context 'with invalid params' do
+      it 'returns 401 user isn\'t authenticated' do
+        patch "/api/v1/account/password"
+
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns 422' do
+        user = create(:user)
+        token = 'valid_token'
+
+        allow(TokenService).to receive(:validate).with(token).and_return(user.id)
+        allow(AccountService).to receive(:reset_password).with(user, user.password, user.password)
+          .and_return({ success: false, errors: 'errors' })
+
+        patch "/api/v1/account/password", headers: { 'Authorization' => "Bearer #{token}" },
+          params: { user: { current_password: user.password, new_password: user.password } }
+
+        expect(response).to have_http_status(:unprocessable_content)
+        expect(response.body).to include_json(
+          status: 422,
+          code: 'UNPROCESSABLE_ENTITY',
+          message: 'Invalid Params',
+          errors: 'errors'
+        )
+      end
+    end
+  end
 end

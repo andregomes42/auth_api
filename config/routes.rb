@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       post 'signup', to: 'account#signup'
+      patch 'account/password', to: 'account#reset_password'
+      
       post 'login', to: 'auth#login'
       patch 'refresh', to: 'auth#refresh'
       delete 'logout', to: 'auth#logout'

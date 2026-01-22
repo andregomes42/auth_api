@@ -84,8 +84,6 @@ RSpec.describe 'API::V1::AuthController', type: :request do
 
     context 'without authentication' do
       it 'returns 401' do
-        allow(TokenService).to receive(:validate).and_return(nil)
-
         delete '/api/v1/logout'
 
         expect(response).to have_http_status(:unauthorized)

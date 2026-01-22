@@ -44,33 +44,33 @@ class TokenService
 
   private
   
-  def self.access_token(user_id, session_id)
-    payload = payload(user_id, session_id, 5.minutes)
+    def self.access_token(user_id, session_id)
+      payload = payload(user_id, session_id, 5.minutes)
 
-    encode_token(payload)
-  end
+      encode_token(payload)
+    end
 
-  def self.refresh_token(user_id, session_id)
-    payload = payload(user_id, session_id, 8.hours)
+    def self.refresh_token(user_id, session_id)
+      payload = payload(user_id, session_id, 8.hours)
 
-    encode_token(payload)
-  end
+      encode_token(payload)
+    end
 
-  def self.payload(user_id, session_id, expires_in)
-    {
-      sid: session_id,
-      jti: SecureRandom.uuid,
-      sub: user_id,
-      iat: Time.now.to_i,
-      exp: expires_in.from_now.to_i
-    }
-  end
+    def self.payload(user_id, session_id, expires_in)
+      {
+        sid: session_id,
+        jti: SecureRandom.uuid,
+        sub: user_id,
+        iat: Time.now.to_i,
+        exp: expires_in.from_now.to_i
+      }
+    end
 
-  def self.encode_token(payload)
-    JWT.encode(payload, SECRET_KEY, ALGORITHM)
-  end
+    def self.encode_token(payload)
+      JWT.encode(payload, SECRET_KEY, ALGORITHM)
+    end
 
-  def self.decode_token(token)
-    JWT.decode(token, SECRET_KEY, ALGORITHM).first
-  end
+    def self.decode_token(token)
+      JWT.decode(token, SECRET_KEY, ALGORITHM).first
+    end
 end

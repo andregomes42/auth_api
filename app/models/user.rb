@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   private
 
-  def encode
-    self.password = BCrypt::Password.create(password)
-  end
+    def encode
+      self.password = BCrypt::Password.create(password)
+    end
 end
