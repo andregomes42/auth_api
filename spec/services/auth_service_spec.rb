@@ -26,9 +26,8 @@ RSpec.describe AuthService, type: :service do
 
       it 'returns failure when password does not match' do
         user = create(:user)
-        password = 'password'
 
-        response = AuthService.login(user.email, password)
+        response = AuthService.login(user.email, 'password')
 
         expect(response[:success]).to be false
         expect(response[:token]).not_to be_present
@@ -53,14 +52,14 @@ RSpec.describe AuthService, type: :service do
     token = 'access_token'
     exp_time = 1.hour.from_now.to_i
     
+    allow(BLACKLIST).to receive(:setex).with("blacklist:sid:#{session_id}", 3600, 1)
     allow(TokenService).to receive(:extract_sid).with(token).and_return(session_id)
     allow(TokenService).to receive(:extract_exp).with(token).and_return(exp_time)
     allow(Time).to receive(:now).and_return(Time.at(exp_time - 3600))
-    allow(REDIS).to receive(:setex)
 
     response = AuthService.logout(token)
 
     expect(response).to be_nil
-    expect(REDIS).to have_received(:setex).with("blacklist:sid:#{session_id}", 3600, 1)
+    expect(BLACKLIST).to have_received(:setex).with("blacklist:sid:#{session_id}", 3600, 1)
   end
 end

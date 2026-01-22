@@ -15,6 +15,7 @@ class AccountService
 
     return { success: false, errors: user.errors } unless user.errors.empty?
     return { success: false, errors: user.errors } unless user.update(password: new_password)
+    RedisService.increment_version(user.id)
 
     { success: true }
   end

@@ -18,8 +18,8 @@ class ApplicationController < ActionController::API
 
     def authenticate
       begin
-        authorization = request.headers["Authorization"]
-        @token = authorization.split(" ").last
+        authorization = request.headers['Authorization']
+        @token = authorization.split(' ').last
 
         sub = TokenService.validate(@token)
         return render_unauthorized unless sub

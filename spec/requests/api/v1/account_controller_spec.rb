@@ -52,7 +52,7 @@ RSpec.describe 'API::V1::AccountController', type: :request do
         allow(AccountService).to receive(:reset_password).with(user, payload[:pasword], payload[:pasword])
           .and_return({ success: true })
 
-        patch "/api/v1/account/password", headers: { 'Authorization' => "Bearer #{token}" },
+        patch '/api/v1/account/password', headers: { 'Authorization' => "Bearer #{token}" },
           params: { user: { current_password: payload[:pasword], new_password: payload[:pasword] } }
         
         expect(response).to have_http_status(:no_content)
@@ -61,7 +61,7 @@ RSpec.describe 'API::V1::AccountController', type: :request do
 
     context 'with invalid params' do
       it 'returns 401 user isn\'t authenticated' do
-        patch "/api/v1/account/password"
+        patch '/api/v1/account/password'
 
 
         expect(response).to have_http_status(:unauthorized)
@@ -75,7 +75,7 @@ RSpec.describe 'API::V1::AccountController', type: :request do
         allow(AccountService).to receive(:reset_password).with(user, user.password, user.password)
           .and_return({ success: false, errors: 'errors' })
 
-        patch "/api/v1/account/password", headers: { 'Authorization' => "Bearer #{token}" },
+        patch '/api/v1/account/password', headers: { 'Authorization' => "Bearer #{token}" },
           params: { user: { current_password: user.password, new_password: user.password } }
 
         expect(response).to have_http_status(:unprocessable_content)

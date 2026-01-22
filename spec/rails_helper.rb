@@ -25,9 +25,6 @@ require 'rspec/rails'
 #
 Rails.root.glob('spec/support/**/*.rb').sort_by(&:to_s).each { |f| require f }
 
-# Create auth schema before maintain_test_schema! runs
-ActiveRecord::Base.connection.execute("CREATE SCHEMA IF NOT EXISTS auth") unless ActiveRecord::Base.connection.schema_exists?("auth")
-
 # Ensures that the test database schema matches the current schema file.
 # If there are pending migrations it will invoke `db:test:prepare` to
 # recreate the test database by loading the schema.

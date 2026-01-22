@@ -33,11 +33,14 @@ RSpec.describe AccountService, type: :service do
         params = attributes_for(:user)
         user = create(:user, params)
 
+        allow(VERSION_LIST).to receive(:incr).with("token:version:uid:#{user.id}")
+
         response = AccountService.reset_password(user, params[:password], payload[:password])
         user.reload
         
         expect(response[:success]).to be true
         expect(user.password_match(payload[:password])).to be true
+        expect(VERSION_LIST).to have_received(:incr).once
       end
     end
 
@@ -48,7 +51,7 @@ RSpec.describe AccountService, type: :service do
         response = AccountService.reset_password(user, user.name, user.email)
 
         expect(response[:success]).to be false
-        expect(response[:errors][:current_password]).to include("passwords don't match")
+        expect(response[:errors][:current_password]).to include('passwords don\'t match')
       end
     end
   end

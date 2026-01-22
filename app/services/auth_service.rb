@@ -19,6 +19,6 @@ class AuthService
     ttl = TokenService.extract_exp(token) - Time.now.to_i
     sid = TokenService.extract_sid(token)
     
-    REDIS.setex("blacklist:sid:#{sid}", ttl, 1)
+    RedisService.add_to_blacklist(sid, ttl)
   end
 end
