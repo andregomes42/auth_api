@@ -60,7 +60,7 @@ group :development, :test do
 
   gem "factory_bot_rails", "~> 6.5"
 
-  gem "faker", "~> 3.5"
+  gem "faker", "~> 3.6"
 
   gem "rspec-json_expectations", "~> 2.2"
 end
